@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Driver Files">
+      <UniqueIdentifier>{8E41214B-6785-4CFE-B992-037D68949A14}</UniqueIdentifier>
+      <Extensions>inf;inv;inx;mof;mc;</Extensions>
+    </Filter>
+    <Filter Include="Header Files\CRT">
+      <UniqueIdentifier>{add90df9-f4d6-4d7d-af03-8500eec8aae9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\NtHookEngine">
+      <UniqueIdentifier>{16d8ee54-2836-4ed5-961c-e707d1e93d3e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CRT\c_alloc.cc">
+      <Filter>Header Files\CRT</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\corecrt.cc">
+      <Filter>Header Files\CRT</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\new.cc">
+      <Filter>Header Files\CRT</Filter>
+    </ClCompile>
+    <ClCompile Include="CRT\stlcrt.cc">
+      <Filter>Header Files\CRT</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO_Control.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewFunc.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\decoder.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\distorm.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\instructions.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\insts.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\mnemonics.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\operands.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\prefix.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\textdefs.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\wstring.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NtHookEngine\x64detour.c">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CRT\c_alloc.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\corecrt.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\macro.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\new.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\Ntddk.hpp">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\stlcrt.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\NativeEnums.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\NtSysAPI_Func.hpp">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="CRT\PEStructs.h">
+      <Filter>Header Files\CRT</Filter>
+    </ClInclude>
+    <ClInclude Include="NativeMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Get_SSDT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO_Control.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NewFunc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\config.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\decoder.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\distorm.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\instructions.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\insts.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\mnemonics.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\operands.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\prefix.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\textdefs.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\wstring.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\x86defs.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="NtHookEngine\x64detour.h">
+      <Filter>Header Files\NtHookEngine</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
