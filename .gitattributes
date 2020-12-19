@@ -63,3 +63,4 @@
 #*.RTF   diff=astextplain
 
 *.c linguist-language=C++
+*.h linguist-language=C++
