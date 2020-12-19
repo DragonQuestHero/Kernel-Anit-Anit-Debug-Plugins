@@ -55,7 +55,7 @@ bypass PEB->BeingDebugged
 - AADebugTest启动al-khaser
 - x64dbg无插件模式下启动al-khaser
 <h1 align="center">
-	<img width="1641" height="1089"  src="1.png" >
+	<img width="400" height="250"  src="1.png" >
 	<br>
 	<br>
 </h1>
