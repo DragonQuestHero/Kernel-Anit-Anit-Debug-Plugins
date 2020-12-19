@@ -8,14 +8,17 @@ Kernel Anit Anit Debug Plugins
 [English](README-en.md)
 
 When debugging begins, a kernel object called “debug object” is created
+
 调试开始时，将创建一个称为“调试对象”的内核对象
 
 通过重写
+
 NtDebugActiveProcess 
 DbgkpQueueMessage 
 KiDispatchException
 DebugActiveProcess
 DbgUixxx
+
 等函数绕过调试对象(Process->DebugObject)以及其他关键位置实现反反调试效果
 
 #### 目前已实现
@@ -38,6 +41,8 @@ bypass PEB->BeingDebugged
 #### 未来准备支持(按优先级排序)
 
 - 支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg")
+
+- 支持[cheat-engine](https://github.com/cheat-engine/cheat-engine "cheat-engine")
 
 - 绕过大部分[al-khaser](https://github.com/LordNoteworthy/al-khaser "al-khaser")应用层反调试手段
 
@@ -75,14 +80,19 @@ https://github.com/matt-wu 部分代码被我放在了该项目中 不过那部�
 #### 填补完成方式如下:
 
 - ##### 需要自己添加内核钩子库对接NewFunc.cc中的Init 需要注意CPU以及线程同步问题 在x64上还需要注意14字节长度的问题
-- ##### 为了支持双机内核调试 需要自己填补NewKiDispatchException中的Kernel部分代码
+
+- ##### 反内核调试检测需要自己填补NewKiDispatchException中的Kernel部分代码 以及内核调试流程下的全部函数
+
 - ##### 补全应用层符号获取并上传
+
 - ##### 其他
 
 ### 完整代码或二进制文件获取方式:
 
 申请加群 (780705352)
-注:打开群成员界面 如果群里有人现实中与你是朋友或者同事愿意为你担保且群员投票同意的情况下方可加入 否则一律拒绝
+
+注:打开群成员界面 如果群里有人现实中与你是朋友或者同事愿意为你担保(且群员投票同意的情况下)方可加入 否则一律拒绝
 
 #### JAVA交流群(大群-只闲聊)
+
 546110133
