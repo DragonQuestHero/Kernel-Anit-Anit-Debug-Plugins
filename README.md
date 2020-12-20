@@ -32,6 +32,8 @@ bypass DbgUiDebugObjectHandle (NtCurrentTeb()->DbgSsReserved[1])
 - 应用层绕过PEB->BeingDebugged
 bypass PEB->BeingDebugged
 
+- 支持创建进程和附加进程
+
 - ....
 
 ##### BUG
@@ -40,9 +42,9 @@ bypass PEB->BeingDebugged
 
 #### 未来准备支持(按优先级排序)
 
-- 支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg")
+- (已完成)支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg") 
 
-- 支持[cheat-engine](https://github.com/cheat-engine/cheat-engine "cheat-engine")
+- (已完成 待测试)支持[cheat-engine](https://github.com/cheat-engine/cheat-engine "cheat-engine")
 
 - 绕过大部分[al-khaser](https://github.com/LordNoteworthy/al-khaser "al-khaser")应用层反调试手段
 
@@ -61,6 +63,13 @@ bypass PEB->BeingDebugged
 - x64dbg无插件模式下启动al-khaser
 <h1 align="center">
 	<img src="1.png" >
+	<br>
+	<br>
+</h1>
+
+## Screenshot(2020-12-21)
+<h1 align="center">
+	<img src="2.png" >
 	<br>
 	<br>
 </h1>

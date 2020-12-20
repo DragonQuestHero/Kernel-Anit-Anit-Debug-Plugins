@@ -77,9 +77,42 @@ public://HOOK函数
 		IN PEXCEPTION_RECORD ExceptionRecord,
 		IN BOOLEAN DebugException,
 		IN BOOLEAN SecondChance);
+	static VOID NTAPI NewDbgkCreateThread(PVOID StartAddress);
+	static VOID NTAPI NewDbgkMapViewOfSection(
+		IN PVOID SectionObject,
+		IN PVOID BaseAddress,
+		IN ULONG SectionOffset,
+		IN ULONG_PTR ViewSize);
+	static VOID NTAPI NewDbgkUnMapViewOfSection(IN PVOID BaseAddress);
+	/*static NTSTATUS NTAPI NewPspCreateProcess(
+		OUT PHANDLE ProcessHandle,
+		IN ACCESS_MASK DesiredAccess,
+		IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
+		IN HANDLE ParentProcess OPTIONAL,
+		IN ULONG Flags,
+		IN HANDLE SectionHandle OPTIONAL,
+		IN HANDLE DebugPort OPTIONAL,
+		IN HANDLE ExceptionPort OPTIONAL,
+		IN ULONG JobMemberLevel);*/
+	static NTSTATUS NTAPI NewNtCreateUserProcess(
+		PHANDLE ProcessHandle,
+		PETHREAD ThreadHandle,
+		ACCESS_MASK ProcessDesiredAccess,
+		ACCESS_MASK ThreadDesiredAccess,
+		_OBJECT_ATTRIBUTES *ProcessObjectAttributes,
+		_OBJECT_ATTRIBUTES *ThreadObjectAttributes,
+		ULONG ProcessFlags,
+		ULONG ThreadFlags,
+		_RTL_USER_PROCESS_PARAMETERS *ProcessParameters,
+		void *CreateInfo,
+		void *AttributeList);
 private:
 	HOOK_INFO NewKiDispatchExceptionHookInfo = { 0 };
 	HOOK_INFO NewDbgkForwardExceptionHookInfo = { 0 };
+	HOOK_INFO NewDbgkCreateThreadHookInfo = { 0 };
+	HOOK_INFO NewDbgkMapViewOfSectionHookInfo = { 0 };
+	HOOK_INFO NewDbgkUnMapViewOfSectionHookInfo = { 0 };
+	HOOK_INFO NewNtCreateUserProcessHookInfo = { 0 };
 public:
 	static NewFunc *_This;
 private:
@@ -116,9 +149,21 @@ private:
 	{
 		return (void*)((char*)Process + NtSysAPI_EPROCESS_SectionObject_X64_Win7);
 	}
+	void* PrivateGetProcessSectionBaseAddress(PEPROCESS Process)
+	{
+		return (void*)((char*)Process + NtSysAPI_EPROCESS_SectionBaseAddress_X64_Win7);
+	}
 	PEX_RUNDOWN_REF PrivateGetProcessRundownProtect(PEPROCESS Process)
 	{
 		return (PEX_RUNDOWN_REF)((char*)Process + NtSysAPI_EPROCESS_RundownProtect_X64_Win7);
+	}
+	ULONG PrivateGetProcessUserTime(PEPROCESS Process)
+	{
+		return *(ULONG*)((char*)Process + NtSysAPI_KPROCESS_UserTime_X64_Win7);
+	}
+	ULONG_PTR* PrivateGetProcessDebugPort(PEPROCESS Process)
+	{
+		return (ULONG_PTR*)((char*)Process + NtSysAPI_EPROCESS_DebugPort_X64_Win7);
 	}
 private:
 	_NtProtectVirtualMemory NtProtectVirtualMemory = nullptr;
@@ -134,8 +179,15 @@ private:
 	_DbgkForwardException DbgkForwardException = nullptr;
 	_DbgkpSuspendProcess DbgkpSuspendProcess = nullptr;//不需要实现 没有什么特殊的地方
 	_KeThawAllThreads KeThawAllThreads = nullptr;
+	_DbgkCreateThread DbgkCreateThread = nullptr;
+	_DbgkMapViewOfSection DbgkMapViewOfSection = nullptr;
+	_DbgkUnMapViewOfSection DbgkUnMapViewOfSection = nullptr;
+	//_PspCreateProcess PspCreateProcess = nullptr;废案
+	_NtCreateUserProcess NtCreateUserProcess = nullptr;
+	_DbgkpMarkProcessPeb DbgkpMarkProcessPeb = nullptr;
 private:
 	POBJECT_TYPE *_DbgkDebugObjectType = nullptr;
+	PVOID _PsSystemDllBase = nullptr;
 private:
 	std::vector<DebugInfomation*> _DebugInfomationVector;
 	HANDLE _Io_Handle;
@@ -153,6 +205,9 @@ private:
 #define PS_SET_BITS(Flags, Flag) \
     RtlInterlockedSetBitsDiscardReturn (Flags, Flag)
 
+#define PS_TEST_SET_BITS(Flags, Flag) \
+    RtlInterlockedSetBits (Flags, Flag)
+
 #define ProbeForReadSmallStructure ProbeForRead
 
 #define DBGKM_MSG_OVERHEAD 8
@@ -164,3 +219,10 @@ private:
     (m).h.u1.Length = DBGKM_API_MSG_LENGTH((TypeSize));     \
     (m).h.u2.ZeroInit = LPC_DEBUG_EVENT;                    \
     (m).ApiNumber = (Number)
+
+#define NTDLL_PATH_NAME L"\\SystemRoot\\System32\\ntdll.dll"
+const UNICODE_STRING PsNtDllPathName = {
+	sizeof(NTDLL_PATH_NAME) - sizeof(UNICODE_NULL),
+	sizeof(NTDLL_PATH_NAME),
+	NTDLL_PATH_NAME
+};
