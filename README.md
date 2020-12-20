@@ -24,13 +24,10 @@ DbgUixxx
 #### 目前已实现
 
 - 内核绕过DebugPort
-bypass kernel DebugPort
 
 - 应用层绕过DbgUiDebugObjectHandle (NtCurrentTeb()->DbgSsReserved[1])
-bypass DbgUiDebugObjectHandle (NtCurrentTeb()->DbgSsReserved[1])
 
 - 应用层绕过PEB->BeingDebugged
-bypass PEB->BeingDebugged
 
 - 支持创建进程和附加进程
 
@@ -46,7 +43,7 @@ bypass PEB->BeingDebugged
 
 - (已完成 待测试)支持[cheat-engine](https://github.com/cheat-engine/cheat-engine "cheat-engine")
 
-- 绕过大部分[al-khaser](https://github.com/LordNoteworthy/al-khaser "al-khaser")应用层反调试手段
+- (已完成 有些是内核工程太大 不如在应用层做处理  内核做的话得不偿失)绕过大部分[al-khaser](https://github.com/LordNoteworthy/al-khaser "al-khaser")应用层反调试手段
 
 - 支持虚拟机双机调试 重写内核调试函数 绕过内核反调试检测
 
@@ -55,6 +52,8 @@ bypass PEB->BeingDebugged
 - 支持Win10
 
 - 绕过部分游戏反调试保护(HS BE TP ...)
+
+- 绕过VMP SE等反调试加壳
 
 ## Screenshot(2020-12-20)
 从左到右依次为 
