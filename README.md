@@ -105,11 +105,7 @@ DbgUixxx
 	<br>
 </h1>
 
-<h1 align="center">
-	<img src="7.png" >
-	<br>
-	<br>
-</h1>
+
 
 ## Reference
 
