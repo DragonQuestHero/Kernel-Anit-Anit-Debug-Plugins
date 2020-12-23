@@ -35,6 +35,8 @@ DbgUixxx
 
 - 支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg") 
 
+- 绕过VMP SE等反调试加壳
+
 - ....
 
 ##### BUG
@@ -56,8 +58,6 @@ DbgUixxx
 - 支持Win10
 
 - 绕过部分游戏反调试保护(HS BE TP ...)
-
-- (已完成 待测试)绕过VMP SE等反调试加壳
 
 ## Screenshot(2020-12-20)
 从左到右依次为 
@@ -95,6 +95,18 @@ DbgUixxx
 
 <h1 align="center">
 	<img src="4.png" >
+	<br>
+	<br>
+</h1>
+
+<h1 align="center">
+	<img src="6.png" >
+	<br>
+	<br>
+</h1>
+
+<h1 align="center">
+	<img src="7.png" >
 	<br>
 	<br>
 </h1>
