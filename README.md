@@ -7,9 +7,9 @@ Kernel Anit Anit Debug Plugins
 
 [English](README-en.md)
 
-When debugging begins, a kernel object called “debug object” is created
+## When debugging begins, a kernel object called “debug object” is created
 
-调试开始时，将创建一个称为“调试对象”的内核对象
+## 调试开始时，将创建一个称为“调试对象”的内核对象
 
 通过重写
 
@@ -31,15 +31,19 @@ DbgUixxx
 
 - 支持创建进程和附加进程
 
+- 支持配合ScyllaHide插件同时使用
+
+- 支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg") 
+
 - ....
 
 ##### BUG
 
 - ##### 部分函数还没弄......
 
-#### 未来准备支持(按优先级排序)
+- 未知
 
-- (已完成)支持[x64dbg](https://github.com/x64dbg/x64dbg "x64dbg") 
+#### 未来准备支持(按优先级排序)
 
 - (已完成 待测试)支持[cheat-engine](https://github.com/cheat-engine/cheat-engine "cheat-engine")
 
@@ -53,7 +57,7 @@ DbgUixxx
 
 - 绕过部分游戏反调试保护(HS BE TP ...)
 
-- 绕过VMP SE等反调试加壳
+- (已完成 待测试)绕过VMP SE等反调试加壳
 
 ## Screenshot(2020-12-20)
 从左到右依次为 
@@ -69,6 +73,28 @@ DbgUixxx
 ## Screenshot(2020-12-21)
 <h1 align="center">
 	<img src="2.png" >
+	<br>
+	<br>
+</h1>
+
+## Screenshot(2020-12-23)
+从左到右依次为 
+- 虚拟机正常运行al-khaser
+- x64dbg AADebug插件+ScyllaHide插件 启动al-khaser
+<h1 align="center">
+	<img src="3.png" >
+	<br>
+	<br>
+</h1>
+
+<h1 align="center">
+	<img src="5.png" >
+	<br>
+	<br>
+</h1>
+
+<h1 align="center">
+	<img src="4.png" >
 	<br>
 	<br>
 </h1>
@@ -89,13 +115,11 @@ https://github.com/matt-wu 部分代码被我放在了该项目中 不过那部�
 
 - ##### 需要自己添加内核钩子库对接NewFunc.cc中的Init 需要注意CPU以及线程同步问题 在x64上还需要注意14字节长度的问题
 
-- ##### 反内核调试检测需要自己填补NewKiDispatchException中的Kernel部分代码 以及内核调试流程下的全部函数
-
 - ##### 补全应用层符号获取并上传
 
 - ##### 其他
 
-- ##### 补充:某些游戏或反调试程序就喜欢搞异常测试 这种情况下在内核中直接放过 不要理他 跳过该异常 目标就无法检测调试状态了 至于真异常 那是程序本身的问题 你指望我能帮你干什么? 跟反反调试无关
+- ##### 补充:KiDispatchException可以直接跳过异常但依旧转发给调试器
 
 ### 完整代码或二进制文件获取方式:
 
