@@ -37,11 +37,15 @@ DbgUixxx
 
 - 绕过VMP SE等反调试加壳
 
+- 支持wow64
+
 - ....
 
 ##### BUG
 
 - ##### 部分函数还没弄......
+
+- 不支持32位系统
 
 - 未知
 
@@ -59,7 +63,7 @@ DbgUixxx
 
 - 绕过部分游戏反调试保护(HS BE TP ...)
 
-## Screenshot(2020-12-20)
+### Screenshot(2020-12-20)
 从左到右依次为 
 - 未启用内核模式 虚拟机正常运行al-khaser
 - AADebugTest启动al-khaser
@@ -70,14 +74,14 @@ DbgUixxx
 	<br>
 </h1>
 
-## Screenshot(2020-12-21)
+### Screenshot(2020-12-21)
 <h1 align="center">
 	<img src="2.png" >
 	<br>
 	<br>
 </h1>
 
-## Screenshot(2020-12-23)
+### Screenshot(2020-12-23)
 从左到右依次为 
 - 虚拟机正常运行al-khaser
 - x64dbg AADebug插件+ScyllaHide插件 启动al-khaser
@@ -105,7 +109,18 @@ DbgUixxx
 	<br>
 </h1>
 
+### Screenshot(2020-12-23)
+<h1 align="center">
+	<img src="8.png" >
+	<br>
+	<br>
+</h1>
 
+<h1 align="center">
+	<img src="7.png" >
+	<br>
+	<br>
+</h1>
 
 ## Reference
 
