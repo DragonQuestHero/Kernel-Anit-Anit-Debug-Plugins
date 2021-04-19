@@ -413,20 +413,20 @@ typedef UNICODE_STRING32 *PUNICODE_STRING32;
 typedef STRING32 ANSI_STRING32;
 typedef ANSI_STRING32 *PANSI_STRING32;
 
-typedef struct _STRING64
-{
-	USHORT Length;
-	USHORT MaximumLength;
-	ULONG_PTR	Buffer;
-} STRING64;
+//typedef struct _STRING64
+//{
+//	USHORT Length;
+//	USHORT MaximumLength;
+//	ULONG_PTR	Buffer;
+//} STRING64;
+//
+//typedef STRING64 *PSTRING64;
+//
+//typedef STRING64 UNICODE_STRING64;
+//typedef UNICODE_STRING64 *PUNICODE_STRING64;
 
-typedef STRING64 *PSTRING64;
-
-typedef STRING64 UNICODE_STRING64;
-typedef UNICODE_STRING64 *PUNICODE_STRING64;
-
-typedef STRING64 ANSI_STRING64;
-typedef ANSI_STRING64 *PANSI_STRING64;
+//typedef STRING64 ANSI_STRING64;
+//typedef ANSI_STRING64 *PANSI_STRING64;
 
 typedef USHORT RTL_ATOM;
 typedef RTL_ATOM *PRTL_ATOM;
@@ -22396,19 +22396,20 @@ int __cdecl _vsnwprintf( wchar_t *, size_t, const wchar_t *, va_list );
 //readded 4 jan 2012
 //win64 mode does not need this
 //for using this routines ntdllp.lib is required
-#if !defined(_M_X64)
-IMPORT_FN size_t __cdecl wcslen(const wchar_t *);
-IMPORT_FN wchar_t * __cdecl wcscat(wchar_t *dst, const wchar_t *src);
-IMPORT_FN int __cdecl wcscmp(const wchar_t *src, const wchar_t *dst);
-IMPORT_FN int __cdecl _wcsicmp(const wchar_t *, const wchar_t *);
-IMPORT_FN int __cdecl _wcsnicmp(const wchar_t *, const wchar_t *, size_t);
-IMPORT_FN wchar_t * __cdecl _wcslwr(wchar_t *);
-IMPORT_FN wchar_t * __cdecl _wcsupr(wchar_t *);
-IMPORT_FN wchar_t * __cdecl wcschr(const wchar_t *string, wchar_t ch);
-IMPORT_FN wchar_t * __cdecl wcscpy(wchar_t *dst, const wchar_t *src);
-IMPORT_FN wchar_t * __cdecl wcsncat(wchar_t *front, const wchar_t *back, size_t count);
-IMPORT_FN wchar_t * __cdecl wcsncpy(wchar_t *dest, const wchar_t *source, size_t count);
-#endif //_M_X64
+//#if !defined(_M_X64)
+//#if defined(_AMD64_)
+//IMPORT_FN size_t __cdecl wcslen(const wchar_t *);
+//IMPORT_FN wchar_t * __cdecl wcscat(wchar_t *dst, const wchar_t *src);
+//IMPORT_FN int __cdecl wcscmp(const wchar_t *src, const wchar_t *dst);
+//IMPORT_FN int __cdecl _wcsicmp(const wchar_t *, const wchar_t *);
+//IMPORT_FN int __cdecl _wcsnicmp(const wchar_t *, const wchar_t *, size_t);
+//IMPORT_FN wchar_t * __cdecl _wcslwr(wchar_t *);
+//IMPORT_FN wchar_t * __cdecl _wcsupr(wchar_t *);
+//IMPORT_FN wchar_t * __cdecl wcschr(const wchar_t *string, wchar_t ch);
+//IMPORT_FN wchar_t * __cdecl wcscpy(wchar_t *dst, const wchar_t *src);
+//IMPORT_FN wchar_t * __cdecl wcsncat(wchar_t *front, const wchar_t *back, size_t count);
+//IMPORT_FN wchar_t * __cdecl wcsncpy(wchar_t *dest, const wchar_t *source, size_t count);
+//#endif //_M_X64
 
 #endif	// _NO_NTDLL_CRT_
 

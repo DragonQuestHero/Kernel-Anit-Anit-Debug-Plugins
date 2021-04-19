@@ -2,6 +2,8 @@
 //#include "ntdll.h"
 //#include "ntstatus.h"
 
+//#include "wow64ext/wow64ext.h"
+
 HANDLE HookFunc::_Io_Handle = nullptr;
 HANDLE HookFunc::_DebugObjectHandle = nullptr;
 
@@ -68,8 +70,8 @@ NTSTATUS NTAPI HookFunc::NewNtProtectVirtualMemory(
 	IO_STATUS_BLOCK IoStatusBlock = { 0 };
 	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
 		&IoStatusBlock, IO_NtProtectVirtualMemory,
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory),
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory));
+		&temp_message, sizeof(Message_NtProtectVirtualMemory),
+		&temp_message, sizeof(Message_NtProtectVirtualMemory));
 	return status;
 }
 
@@ -88,8 +90,8 @@ NTSTATUS NTAPI HookFunc::NewNtOpenProcess(
 	IO_STATUS_BLOCK IoStatusBlock = { 0 };
 	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
 		&IoStatusBlock, IO_NtOpenProcess,
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory),
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory));
+		&temp_message, sizeof(Message_NewNtOpenProcess),
+		&temp_message, sizeof(Message_NewNtOpenProcess));
 	return status;
 }
 
@@ -98,7 +100,7 @@ BOOL NTAPI HookFunc::NewDebugActiveProcess(DWORD dwProcessId)
 	HANDLE Process;
 	NTSTATUS Status;
 
-	Status = PrivateDbgUiConnectToDbg();
+	Status = NewDbgUiConnectToDbg();
 	if (!NT_SUCCESS(Status)) 
 	{
 		return FALSE;
@@ -110,7 +112,7 @@ BOOL NTAPI HookFunc::NewDebugActiveProcess(DWORD dwProcessId)
 		return FALSE;
 	}
 
-	Status = PrivateDbgUiDebugActiveProcess(Process);
+	Status = NewDbgUiDebugActiveProcess(Process);
 	if (!NT_SUCCESS(Status)) 
 	{
 		NtClose(Process);
@@ -126,6 +128,7 @@ NTSTATUS NTAPI HookFunc::NewNtDebugActiveProcess(
 	IN HANDLE DebugObjectHandle)
 {
 	NTSTATUS status = 0;
+#ifdef _AMD64_
 	Message_NewNtDebugActiveProcess temp_message = { 0 };
 	temp_message.ProcessId = (HANDLE)GetProcessId(ProcessHandle);//DebugObjectHandle就是目标进程ID
 	temp_message.ProcessHandle = ProcessHandle;
@@ -133,8 +136,19 @@ NTSTATUS NTAPI HookFunc::NewNtDebugActiveProcess(
 	IO_STATUS_BLOCK IoStatusBlock = { 0 };
 	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
 		&IoStatusBlock, IO_NtDebugActiveProcess,
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory),
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory));
+		&temp_message, sizeof(Message_NewNtDebugActiveProcess),
+		&temp_message, sizeof(Message_NewNtDebugActiveProcess));
+#else
+	Message_NewNtDebugActiveProcess64 temp_message = { 0 };
+	temp_message.ProcessId = (ULONG64)GetProcessId(ProcessHandle);//DebugObjectHandle就是目标进程ID
+	temp_message.ProcessHandle = (ULONG64)ProcessHandle;
+	temp_message.DebugObjectHandle = (ULONG64)DebugObjectHandle;
+	IO_STATUS_BLOCK IoStatusBlock = { 0 };
+	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
+		&IoStatusBlock, IO_NtDebugActiveProcess,
+		&temp_message, sizeof(Message_NewNtDebugActiveProcess),
+		&temp_message, sizeof(Message_NewNtDebugActiveProcess));
+#endif // _AMD64_
 	return status;
 }
 
@@ -145,6 +159,7 @@ NTSTATUS NTAPI HookFunc::NewNtCreateDebugObject(
 	IN ULONG Flags)
 {
 	NTSTATUS status = 0;
+#ifdef _AMD64_
 	Message_NewNtCreateDebugObject temp_message = { 0 };
 	temp_message.DebugObjectHandle = DebugObjectHandle;
 	temp_message.DesiredAccess = DesiredAccess;
@@ -153,8 +168,56 @@ NTSTATUS NTAPI HookFunc::NewNtCreateDebugObject(
 	IO_STATUS_BLOCK IoStatusBlock = { 0 };
 	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
 		&IoStatusBlock, IO_NtCreateDebugObject,
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory),
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory));
+		&temp_message, sizeof(Message_NewNtCreateDebugObject),
+		&temp_message, sizeof(Message_NewNtCreateDebugObject));
+#else
+	UNICODE_STRING64 temp_str = { 0 };//本就未初始化
+	
+
+	//Wow64ExtInit();
+	//ULONG64 addr64 = VirtualAllocEx64(GetCurrentProcess(), NULL, sizeof(OBJECT_ATTRIBUTES64), MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	//if (addr64 == 0)
+	//{
+	//	//MessageBoxA(NULL, NULL, NULL, NULL);
+	//}
+
+	OBJECT_ATTRIBUTES64 temp_obj = { 0 };
+	temp_obj.Length = sizeof(OBJECT_ATTRIBUTES64);
+	temp_obj.ObjectName = (ULONG64)ObjectAttributes->ObjectName;
+	/*OBJECT_ATTRIBUTES64 *temp_obj = new OBJECT_ATTRIBUTES64();
+	temp_obj->Length = sizeof(OBJECT_ATTRIBUTES64);*/
+	
+
+	Message_NewNtCreateDebugObject64 temp_message = { 0 };
+	temp_message.DebugObjectHandle = (ULONG64)DebugObjectHandle;
+	temp_message.DesiredAccess = DesiredAccess;
+	temp_message.ObjectAttributes = (ULONG64)&temp_obj;
+	temp_message.Flags = Flags;
+
+
+	IO_STATUS_BLOCK IoStatusBlock = { 0 };
+	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
+		&IoStatusBlock, IO_NtCreateDebugObject,
+		&temp_message, sizeof(Message_NewNtCreateDebugObject64),
+		&temp_message, sizeof(Message_NewNtCreateDebugObject64));
+
+
+	ObjectAttributes->Attributes = temp_obj.Attributes;
+	ObjectAttributes->Length = 0x18;
+	ObjectAttributes->RootDirectory = (HANDLE)temp_obj.RootDirectory;
+	ObjectAttributes->SecurityDescriptor = (PVOID)temp_obj.SecurityDescriptor;
+	ObjectAttributes->SecurityQualityOfService = (PVOID)temp_obj.SecurityQualityOfService;
+	/*if (temp_str.Buffer != 0)//未初始化
+	{
+		ObjectAttributes->ObjectName->Buffer = (PWSTR)temp_str.Buffer;
+	}
+	ObjectAttributes->ObjectName->Length = temp_str.Length;
+	ObjectAttributes->ObjectName->MaximumLength = temp_str.MaximumLength;*/
+	
+
+#endif // _AMD64_
+
+	
 	return status;
 }
 
@@ -163,6 +226,7 @@ NTSTATUS NTAPI HookFunc::NewNtRemoveProcessDebug(
 	IN HANDLE DebugObjectHandle)
 {
 	NTSTATUS status = 0;
+#ifdef _AMD64_
 	Message_NewNtRemoveProcessDebug temp_message = { 0 };
 	temp_message.ProcessId = (HANDLE)GetProcessId(ProcessHandle);//同NewNtDebugActiveProcess
 	temp_message.ProcessHandle = ProcessHandle;
@@ -170,8 +234,19 @@ NTSTATUS NTAPI HookFunc::NewNtRemoveProcessDebug(
 	IO_STATUS_BLOCK IoStatusBlock = { 0 };
 	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
 		&IoStatusBlock, IO_NtRemoveProcessDebug,
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory),
-		&temp_message, sizeof(Message_NtReadWriteVirtualMemory));
+		&temp_message, sizeof(Message_NewNtRemoveProcessDebug),
+		&temp_message, sizeof(Message_NewNtRemoveProcessDebug));
+#else
+	Message_NewNtRemoveProcessDebug temp_message = { 0 };
+	temp_message.ProcessId = (HANDLE)GetProcessId(ProcessHandle);//同NewNtDebugActiveProcess
+	temp_message.ProcessHandle = ProcessHandle;
+	temp_message.DebugObjectHandle = DebugObjectHandle;
+	IO_STATUS_BLOCK IoStatusBlock = { 0 };
+	status = ZwDeviceIoControlFile(_Io_Handle, nullptr, nullptr, nullptr,
+		&IoStatusBlock, IO_NtRemoveProcessDebug,
+		&temp_message, sizeof(Message_NewNtRemoveProcessDebug),
+		&temp_message, sizeof(Message_NewNtRemoveProcessDebug));
+#endif // _AMD64_
 	return status;
 }
 
@@ -189,7 +264,7 @@ int WINAPI TestMessageBoxA(
 	return 0;
 }
 
-NTSTATUS WINAPI HookFunc::PrivateDbgUiConnectToDbg(VOID)
+NTSTATUS WINAPI HookFunc::NewDbgUiConnectToDbg(VOID)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
 	OBJECT_ATTRIBUTES oa;
@@ -201,7 +276,7 @@ NTSTATUS WINAPI HookFunc::PrivateDbgUiConnectToDbg(VOID)
 	return Status;
 }
 
-NTSTATUS NTAPI HookFunc::PrivateDbgUiDebugActiveProcess(IN HANDLE Process)
+NTSTATUS NTAPI HookFunc::NewDbgUiDebugActiveProcess(IN HANDLE Process)
 {
 	NTSTATUS Status;
 	Status = NewNtDebugActiveProcess(Process, _DebugObjectHandle);
@@ -227,6 +302,10 @@ NTSTATUS NTAPI HookFunc::NewDbgUiContinue(
 	IN PCLIENT_ID AppClientId,
 	IN NTSTATUS ContinueStatus)
 {
-	 NTSTATUS s = NtDebugContinue(_DebugObjectHandle, AppClientId, ContinueStatus);
-	 return s;
+	 return NtDebugContinue(_DebugObjectHandle, AppClientId, ContinueStatus);
+}
+
+HANDLE NTAPI HookFunc::NewDbgUiGetThreadDebugObject()
+{
+	return _DebugObjectHandle;
 }

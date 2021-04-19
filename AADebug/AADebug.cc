@@ -2,118 +2,25 @@
 #include "DetoursHook.h"
 #include "HookFunc.h"
 
-#include "FindSymbl/FindAddress.h"
-
 HookFunc *_HookFunc = nullptr;
 
 bool AADebug::Init()
 {
-	CFindAddress *FindAddr = new CFindAddress();
-
-	DbgkpWakeTarget = FindAddr->FindSymAddress("DbgkpWakeTarget");
-	if (DbgkpWakeTarget == 0)
-	{
-		return false;
-	}
-
-	PsResumeThread = FindAddr->FindSymAddress("PsResumeThread");
-	if (PsResumeThread == 0)
-	{
-		return false;
-	}
-
-	PsSuspendThread = FindAddr->FindSymAddress("PsSuspendThread");
-	if (PsSuspendThread == 0)
-	{
-		return false;
-	}
-
-	PsGetNextProcessThread = FindAddr->FindSymAddress("PsGetNextProcessThread");
-	if (PsGetNextProcessThread == 0)
-	{
-		return false;
-	}
-
-	DbgkpSectionToFileHandle = FindAddr->FindSymAddress("DbgkpSectionToFileHandle");
-	if (DbgkpSectionToFileHandle == 0)
-	{
-		return false;
-	}
-
-	MmGetFileNameForAddress = FindAddr->FindSymAddress("MmGetFileNameForAddress");
-	if (MmGetFileNameForAddress == 0)
-	{
-		return false;
-	}
-
-	KiDispatchException = FindAddr->FindSymAddress("KiDispatchException");
-	if (KiDispatchException == 0)
-	{
-		return false;
-	}
-
-	DbgkForwardException = FindAddr->FindSymAddress("DbgkForwardException");
-	if (DbgkForwardException == 0)
-	{
-		return false;
-	}
-
-	DbgkpSuspendProcess = FindAddr->FindSymAddress("DbgkpSuspendProcess");
-	if (DbgkpSuspendProcess == 0)
-	{
-		return false;
-	}
-
-	KeThawAllThreads = FindAddr->FindSymAddress("KeThawAllThreads");
-	if (KeThawAllThreads == 0)
-	{
-		return false;
-	}
-
-	DbgkDebugObjectType = FindAddr->FindSymAddress("DbgkDebugObjectType");
-	if (DbgkDebugObjectType == 0)
-	{
-		return false;
-	}
-
-	//return true;//test
-
 	HANDLE device = CreateFileA("\\\\.\\AADebug", GENERIC_READ | GENERIC_WRITE, 0,
 		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (device == INVALID_HANDLE_VALUE)
 	{
+		MessageBoxA(NULL, "CreateFileA", NULL, NULL);
 		return false;
 	}
 	_HookFunc = new HookFunc(device);
 	if (!_HookFunc)
 	{
+		MessageBoxA(NULL, "HookFunc", NULL, NULL);
 		return false;
 	}
 
-	Message_Init temp_message;
-	temp_message.DbgkpWakeTarget = DbgkpWakeTarget;
-	temp_message.PsResumeThread = PsResumeThread;
-	temp_message.PsSuspendThread = PsSuspendThread;
-	temp_message.PsGetNextProcessThread = PsGetNextProcessThread;
-	temp_message.DbgkpSectionToFileHandle = DbgkpSectionToFileHandle;
-	temp_message.MmGetFileNameForAddress = MmGetFileNameForAddress;
-	temp_message.KiDispatchException = KiDispatchException;
-	temp_message.DbgkForwardException = DbgkForwardException;
-	temp_message.DbgkpSuspendProcess = DbgkpSuspendProcess;
-	temp_message.KeThawAllThreads = KeThawAllThreads;
-	temp_message.DbgkDebugObjectType = DbgkDebugObjectType;
-	IO_STATUS_BLOCK IoStatusBlock = { 0 };
-	NTSTATUS status = ZwDeviceIoControlFile(device, nullptr, nullptr, nullptr,
-		&IoStatusBlock, IO_Init,
-		&temp_message, sizeof(Message_Init),
-		&temp_message, sizeof(Message_Init));
-	if (NT_SUCCESS(status))
-	{
-		return true;
-	}
-
-	MessageBoxA(NULL, NULL, NULL, NULL);
-	return false;
+	return true;
 }
 
 bool AADebug::StartHook()
@@ -129,7 +36,7 @@ bool AADebug::StartHook()
 	{
 		return false;
 	}
-
+	
 	_Original_ReadVirtualMemory = DetoursHook("Ntdll.dll", "NtReadVirtualMemory", HookFunc::NewNtReadVirtualMemory);
 	if (!_Original_ReadVirtualMemory)
 	{
@@ -142,11 +49,11 @@ bool AADebug::StartHook()
 		return false;
 	}
 
-	_Original_ProtectVirtualMemory = DetoursHook("Ntdll.dll", "NtProtectVirtualMemory", HookFunc::NewNtProtectVirtualMemory);
+	/*_Original_ProtectVirtualMemory = DetoursHook("Ntdll.dll", "NtProtectVirtualMemory", HookFunc::NewNtProtectVirtualMemory);
 	if (!_Original_ProtectVirtualMemory)
 	{
 		return false;
-	}
+	}*/
 
 	_Original_NtOpenProcess = DetoursHook("Ntdll.dll", "NtOpenProcess", HookFunc::NewNtOpenProcess);
 	if (!_Original_NtOpenProcess)
@@ -172,12 +79,12 @@ bool AADebug::StartHook()
 		return false;
 	}
 
-	_Original_NtRemoveProcessDebug = DetoursHook("Ntdll.dll", "NtRemoveProcessDebug", HookFunc::NewNtRemoveProcessDebug);
+	/*_Original_NtRemoveProcessDebug = DetoursHook("Ntdll.dll", "NtRemoveProcessDebug", HookFunc::NewNtRemoveProcessDebug);
 	if (!_Original_NtRemoveProcessDebug)
 	{
 		return false;
-	}
-	
+	}*/
+
 	_Original_DbgUiWaitStateChange = DetoursHook("Ntdll.dll", "DbgUiWaitStateChange", HookFunc::NewDbgUiWaitStateChange);
 	if (!_Original_DbgUiWaitStateChange)
 	{
@@ -186,6 +93,24 @@ bool AADebug::StartHook()
 
 	_Original_DbgUiContinue = DetoursHook("Ntdll.dll", "DbgUiContinue", HookFunc::NewDbgUiContinue);
 	if (!_Original_DbgUiContinue)
+	{
+		return false;
+	}
+
+	_Original_DbgUiGetThreadDebugObject = DetoursHook("Ntdll.dll", "DbgUiGetThreadDebugObject", HookFunc::NewDbgUiGetThreadDebugObject);
+	if (!_Original_DbgUiGetThreadDebugObject)
+	{
+		return false;
+	}
+
+	_Original_DbgUiConnectToDbg = DetoursHook("Ntdll.dll", "DbgUiConnectToDbg", HookFunc::NewDbgUiConnectToDbg);
+	if (!_Original_DbgUiConnectToDbg)
+	{
+		return false;
+	}
+
+	_Original_DbgUiDebugActiveProcess = DetoursHook("Ntdll.dll", "DbgUiDebugActiveProcess", HookFunc::NewDbgUiDebugActiveProcess);
+	if (!_Original_DbgUiDebugActiveProcess)
 	{
 		return false;
 	}

@@ -66,6 +66,27 @@ NTSTATUS IO_Control::Code_Control_Center(PDEVICE_OBJECT  DeviceObject, PIRP pIrp
 	
 	do 
 	{
+		if (Io_Control_Code == IO_Init)
+		{
+			if (_This->InitFlag == true)
+			{
+				break;
+			}
+			if (Input_Output_Buffer != nullptr && Input_Lenght != 0 && Output_Lenght != 0)
+			{
+				if (_This->_NewFunc->Init((Message_Init*)Input_Output_Buffer))
+				{
+					_This->InitFlag = true;
+				}
+			}
+			break;
+		}
+
+		if (_This->InitFlag == false)
+		{
+			break;
+		}
+
 		if (Io_Control_Code == IO_NtReadWriteVirtualMemory)
 		{
 			if (Input_Output_Buffer != nullptr && Input_Lenght != 0 && Output_Lenght != 0)
@@ -93,7 +114,7 @@ NTSTATUS IO_Control::Code_Control_Center(PDEVICE_OBJECT  DeviceObject, PIRP pIrp
 				status = STATUS_UNSUCCESSFUL;
 			}
 			pIrp->IoStatus.Status = status;
-			pIrp->IoStatus.Information = sizeof(Message_NtReadWriteVirtualMemory);
+			pIrp->IoStatus.Information = sizeof(Message_NtProtectVirtualMemory);
 			break;
 		}
 
@@ -113,25 +134,6 @@ NTSTATUS IO_Control::Code_Control_Center(PDEVICE_OBJECT  DeviceObject, PIRP pIrp
 			break;
 		}
 
-
-		if (Io_Control_Code == IO_Init)
-		{
-			if (Input_Output_Buffer != nullptr && Input_Lenght != 0 && Output_Lenght != 0)
-			{
-				DbgBreakPoint();
-				if (_This->_NewFunc->Init((Message_Init*)Input_Output_Buffer))
-				{
-					_This->InitFlag = true;
-				}
-			}
-			break;
-		}
-
-		if (_This->InitFlag == false)
-		{
-			break;
-		}
-
 		if (Io_Control_Code == IO_NtCreateDebugObject)
 		{
 			if (Input_Output_Buffer != nullptr && Input_Lenght != 0 && Output_Lenght != 0)
@@ -147,7 +149,6 @@ NTSTATUS IO_Control::Code_Control_Center(PDEVICE_OBJECT  DeviceObject, PIRP pIrp
 			break;
 		}
 
-		DbgBreakPoint();
 		if (Io_Control_Code == IO_NtDebugActiveProcess)
 		{
 			if (Input_Output_Buffer != nullptr && Input_Lenght != 0 && Output_Lenght != 0)

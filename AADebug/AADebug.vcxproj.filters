@@ -16,9 +16,6 @@
     <Filter Include="头文件\Detours">
       <UniqueIdentifier>{27f7e0ed-6bed-4804-b7cb-7be7b70a17e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\FindSymbl">
-      <UniqueIdentifier>{4f1dc64f-b859-457e-89a9-616e97e1b679}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cc">
@@ -29,12 +26,6 @@
     </ClCompile>
     <ClCompile Include="HookedFunc.cc">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FindSymbl\sym.cpp">
-      <Filter>头文件\FindSymbl</Filter>
-    </ClCompile>
-    <ClCompile Include="FindSymbl\FindAddress.cpp">
-      <Filter>头文件\FindSymbl</Filter>
     </ClCompile>
     <ClCompile Include="DetoursHook.cc">
       <Filter>头文件\Detours</Filter>
@@ -58,12 +49,6 @@
     </ClInclude>
     <ClInclude Include="..\AADebugKernel\NativeMessage.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="FindSymbl\FindAddress.h">
-      <Filter>头文件\FindSymbl</Filter>
-    </ClInclude>
-    <ClInclude Include="FindSymbl\sym.h">
-      <Filter>头文件\FindSymbl</Filter>
     </ClInclude>
     <ClInclude Include="DetoursHook.h">
       <Filter>头文件\Detours</Filter>

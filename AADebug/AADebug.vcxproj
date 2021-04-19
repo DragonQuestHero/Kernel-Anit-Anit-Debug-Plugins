@@ -88,11 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AADEBUG_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ntdll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Detours.lib;ntdll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)Detours\lib.X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -154,8 +156,6 @@
   <ItemGroup>
     <ClCompile Include="AADebug.cc" />
     <ClCompile Include="DetoursHook.cc" />
-    <ClCompile Include="FindSymbl\FindAddress.cpp" />
-    <ClCompile Include="FindSymbl\sym.cpp" />
     <ClCompile Include="HookedFunc.cc" />
     <ClCompile Include="Main.cc">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
@@ -177,8 +177,6 @@
     <ClInclude Include="AADebug.h" />
     <ClInclude Include="DetoursHook.h" />
     <ClInclude Include="Detours\detours.h" />
-    <ClInclude Include="FindSymbl\FindAddress.h" />
-    <ClInclude Include="FindSymbl\sym.h" />
     <ClInclude Include="HookFunc.h" />
     <ClInclude Include="ntdll.h" />
     <ClInclude Include="ntstatus.h" />

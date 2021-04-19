@@ -14,10 +14,13 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		AADebug aadebug;
 		if (!aadebug.Init())
 		{
-			MessageBoxA(NULL, "sym error", NULL, NULL);
+			MessageBoxA(NULL, "Init", NULL, NULL);
+		}
+		if (!aadebug.Test())
+		{
+			MessageBoxA(NULL, "Test", NULL, NULL);
 		}
 		//aadebug.StartHook();
-		aadebug.Test();
 	}
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:

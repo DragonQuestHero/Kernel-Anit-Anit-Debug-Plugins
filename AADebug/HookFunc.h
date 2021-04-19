@@ -60,6 +60,9 @@ public:
 	static NTSTATUS NTAPI NewDbgUiContinue(
 		IN PCLIENT_ID AppClientId,
 		IN NTSTATUS ContinueStatus);
+	static HANDLE NTAPI NewDbgUiGetThreadDebugObject();
+	static NTSTATUS WINAPI NewDbgUiConnectToDbg(VOID);
+	static NTSTATUS NTAPI NewDbgUiDebugActiveProcess(IN HANDLE Process);
 public:
 	static int WINAPI TestMessageBoxA(
 		_In_opt_ HWND hWnd,
@@ -67,8 +70,6 @@ public:
 		_In_opt_ LPCSTR lpCaption,
 		_In_ UINT uType);
 private:
-	static NTSTATUS WINAPI PrivateDbgUiConnectToDbg(VOID);
-	static NTSTATUS NTAPI PrivateDbgUiDebugActiveProcess(IN HANDLE Process);
 private:
 	static HANDLE _Io_Handle;
 	static HANDLE _DebugObjectHandle;

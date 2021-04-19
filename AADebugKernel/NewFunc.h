@@ -67,22 +67,42 @@ private://私有实现函数
 		IN OUT PDBGKM_APIMSG ApiMsg,
 		IN BOOLEAN SuspendProcess);
 public://HOOK函数
+#ifdef _AMD64_
 	static VOID NTAPI NewKiDispatchException(
 		IN PEXCEPTION_RECORD ExceptionRecord,
 		IN PKEXCEPTION_FRAME ExceptionFrame,
 		IN PKTRAP_FRAME TrapFrame,
 		IN KPROCESSOR_MODE PreviousMode,
 		IN BOOLEAN FirstChance);
+#else
+	static VOID NTAPI NewKiDispatchException(
+		IN PEXCEPTION_RECORD ExceptionRecord,
+		IN void *ExceptionFrame,
+		IN void *TrapFrame,
+		IN KPROCESSOR_MODE PreviousMode,
+		IN BOOLEAN FirstChance);
+#endif // _AMD64_
+
+	
 	static BOOLEAN NTAPI NewDbgkForwardException(
 		IN PEXCEPTION_RECORD ExceptionRecord,
 		IN BOOLEAN DebugException,
 		IN BOOLEAN SecondChance);
-	static VOID NTAPI NewDbgkCreateThread(PVOID StartAddress);
+	static VOID NTAPI NewDbgkCreateThread(PETHREAD Thread, PVOID StartAddress);
+#ifdef _AMD64_
 	static VOID NTAPI NewDbgkMapViewOfSection(
-		IN PVOID SectionObject,
+		PEPROCESS Process,
+		void *SectionObject,
+		void *BaseAddress,
+		unsigned int SectionOffset,
+		unsigned __int64 ViewSize);
+#else
+	static VOID NTAPI NewDbgkMapViewOfSection(
+		IN HANDLE SectionHandle,
 		IN PVOID BaseAddress,
 		IN ULONG SectionOffset,
 		IN ULONG_PTR ViewSize);
+#endif // _AMD64_
 	static VOID NTAPI NewDbgkUnMapViewOfSection(IN PVOID BaseAddress);
 	/*static NTSTATUS NTAPI NewPspCreateProcess(
 		OUT PHANDLE ProcessHandle,
@@ -136,6 +156,10 @@ private:
 	{
 		return (PEX_RUNDOWN_REF)((char*)Thread + NtSysAPI_ETHREAD_RundownProtect_X64_Win7);
 	}
+	PKTIMER PrivateGetThreadTimer(PETHREAD Thread)
+	{
+		return (PKTIMER)((char*)Thread + NtSysAPI_KTHREAD_Timer_X64_Win7);
+	}
 private:
 	ULONG* PrivateGetProcessFlags(PEPROCESS Process)
 	{
@@ -185,6 +209,7 @@ private:
 	//_PspCreateProcess PspCreateProcess = nullptr;废案
 	_NtCreateUserProcess NtCreateUserProcess = nullptr;
 	_DbgkpMarkProcessPeb DbgkpMarkProcessPeb = nullptr;
+	_DbgkpSuppressDbgMsg DbgkpSuppressDbgMsg = nullptr;
 private:
 	POBJECT_TYPE *_DbgkDebugObjectType = nullptr;
 	PVOID _PsSystemDllBase = nullptr;
@@ -226,3 +251,7 @@ const UNICODE_STRING PsNtDllPathName = {
 	sizeof(NTDLL_PATH_NAME),
 	NTDLL_PATH_NAME
 };
+
+
+#define DBGKP_FIELD_FROM_IMAGE_OPTIONAL_HEADER(hdrs,field) \
+            ((hdrs)->OptionalHeader.##field)

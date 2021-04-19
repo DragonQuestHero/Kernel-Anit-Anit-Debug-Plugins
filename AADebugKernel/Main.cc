@@ -12,7 +12,6 @@ IO_Control *_IO_Control = nullptr;
 
 void DriverUnload(PDRIVER_OBJECT drive_object)
 {
-	DbgBreakPoint();
 	DbgPrint("Unload Over!\n");
 	_IO_Control->Delete_IO_Control();
 	delete _IO_Control;
