@@ -172,7 +172,9 @@ I put part of the code in the project, but that part of the code has been delete
 #### 为了避免一些不必要的麻烦 删除了内核钩子库部分代码 剩余部分已经补全
 #### The anti-anti-debugging plug-in is special. In order to avoid some unnecessary troubles, some codes have been deleted (only less than 1% have been deleted
 
-
+#### 压缩包密码: 
+#### Release passwd
+123 1234 123456 123456789 (我忘记具体是哪个了...)
 
 ### 内核交流小群(780705352)
 
