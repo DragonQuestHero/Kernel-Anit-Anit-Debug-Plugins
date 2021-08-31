@@ -169,32 +169,14 @@ I put part of the code in the project, but that part of the code has been delete
 
 # Build
 
-#### 反反调试插件比较特殊 为了避免一些不必要的麻烦 删除了部分代码(仅删除了不到5%
-#### The anti-anti-debugging plug-in is special. In order to avoid some unnecessary troubles, some codes have been deleted (only less than 5% have been deleted
+#### 为了避免一些不必要的麻烦 删除了内核钩子库部分代码 剩余部分已经补全
+#### The anti-anti-debugging plug-in is special. In order to avoid some unnecessary troubles, some codes have been deleted (only less than 1% have been deleted
 
-#### 填补完成方式如下:
-#### The filling is completed as follows:
 
-- ##### 需要自己添加内核钩子库对接NewFunc.cc中的Init 需要注意CPU以及线程同步问题 在x64上还需要注意14字节长度的问题
-- ##### You need to add your own kernel hook library to connect to Init in NewFunc.cc. You need to pay attention to CPU and thread synchronization issues. On x64, you also need to pay attention to the 14-byte length.
-
-- ##### 补全应用层符号获取并上传
-- ##### Complete application layer symbol acquisition and upload
-
-- ##### 其他
-- ##### etc.
-
-- ##### 补充:KiDispatchException可以直接跳过异常但依旧转发给调试器
-- ##### Supplement: KiDispatchException can skip the exception directly but still forward it to the debugger
-
-### 完整代码或二进制文件获取方式:
-
-- 未来可能放在群文件中
 
 ### 内核交流小群(780705352)
 
-注:仅供windows内核技术交流 入群审核较严格 申请加群后 我会添加好友 麻烦各位通过好友请求并耐心等待审核
+注:仅供windows内核技术交流 邀请制或审核制入群 
+申请加群后 我会添加好友 麻烦各位通过好友请求并耐心等待审核
 
-#### JAVA交流群(大群-只闲聊)
 
-546110133
